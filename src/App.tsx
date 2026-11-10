@@ -3,6 +3,14 @@ import { PromptInput } from './components/PromptInput';
 import { ComponentCard } from './components/ComponentCard';
 import { useComponentGenerator } from './hooks/useComponentGenerator';
 import type { Provider } from './types';
+import { usePersistentState } from './hooks/usePersistentState';
+import { addPromptHistory } from './utils/promptHistory';
+import {
+  STORAGE_KEYS,
+  parseProvider,
+  parseString,
+  parseStringArray,
+} from './utils/storage';
 import './App.css';
 
 const PROVIDER_CONFIG = {
@@ -11,9 +19,18 @@ const PROVIDER_CONFIG = {
 } as const;
 
 function App() {
-  const [apiKey, setApiKey] = useState('');
+  const [apiKey, setApiKey] = usePersistentState(STORAGE_KEYS.apiKey, '', parseString);
   const [showKey, setShowKey] = useState(false);
-  const [provider, setProvider] = useState<Provider>('google');
+  const [provider, setProvider] = usePersistentState<Provider>(
+    STORAGE_KEYS.provider,
+    'google',
+    parseProvider,
+  );
+  const [promptHistory, setPromptHistory] = usePersistentState<string[]>(
+    STORAGE_KEYS.promptHistory,
+    [],
+    parseStringArray,
+  );
   const [envKeys, setEnvKeys] = useState<Record<Provider, boolean>>({
     anthropic: false,
     google: false,
@@ -35,6 +52,7 @@ function App() {
       alert(`${PROVIDER_CONFIG[provider].label} API 키를 입력하거나 .env에 설정해주세요.`);
       return;
     }
+    setPromptHistory((prev) => addPromptHistory(prev, prompt));
     generate(prompt, apiKey || undefined, provider);
   };
 
@@ -74,7 +92,11 @@ function App() {
             <p className="intro">
               요청을 입력하면 React 컴포넌트를 만들고, 바로 미리보기와 코드로 확인할 수 있습니다.
             </p>
-            <PromptInput onGenerate={handleGenerate} isLoading={isLoading} />
+            <PromptInput
+              onGenerate={handleGenerate}
+              isLoading={isLoading}
+              history={promptHistory}
+            />
           </div>
         </section>
 
