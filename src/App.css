@@ -326,6 +326,25 @@
   line-height: 1.7;
 }
 
+.prompt-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  font-size: 0.875rem;
+}
+
+.prompt-error {
+  color: #b00020;
+  font-weight: 700;
+}
+
+.prompt-counter {
+  margin-left: auto;
+  color: #5c5a78;
+}
+
 .prompt-textarea::placeholder {
   color: #8c8aa6;
 }
