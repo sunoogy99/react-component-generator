@@ -9,6 +9,8 @@
 - 단일 테스트: `bunx vitest run server/generator.test.ts`
 - 린트: `bun run lint`
 - 빌드(타입체크 포함): `bun run build`
+- 커밋 보호 훅: `git commit`(Bash/PowerShell) 직전에 `.claude/hooks/commit-guard.ts`가 `bun run test`를 실행하고, 실패하면 커밋을 차단한다. 훅을 우회(`--no-verify`로 인한 우회 시도, 훅 설정 제거·완화)하지 않는다. 훅 수정은 사용자의 명시적 승인이 필요하다.
+- TDD 리마인더 훅: `.ts`/`.tsx`를 Edit/Write하기 직전에 `.claude/hooks/tdd-reminder.ts`가 `.claude/rules/tdd.md` 준수 여부를 확인하라는 프롬프트를 주입한다(차단하지 않음). 리마인더를 받으면 RED 선행 여부를 점검하고, 훅을 제거·완화하지 않는다.
 - 변경 후 완료 선언 전에 `bun run test`, `bun run lint`, `bun run build`를 실행한다.
 
 ## Golden Rules
@@ -19,6 +21,12 @@
 - Google 호출은 API 키를 URL 쿼리(`?key=`)로 전달한다 (`server/index.ts:99`). 이 URL을 로그나 에러 메시지에 포함하지 않는다.
 - 사용자가 UI에 입력한 `apiKey`는 새로고침 후에도 유지되도록 `localStorage`(`rcg:apiKey`)에 저장한다 (`src/App.tsx`, `src/utils/storage.ts`). 서버로는 요청 본문으로만 보내고, 로그/에러 메시지/URL에 넣지 않는다. 이 저장은 사용자 결정으로 허용된 예외다(XSS 시 유출 위험 인지).
 - `.env`는 커밋하지 않는다 (`.gitignore`). 키 이름 추가 시 `.env.example`도 함께 수정한다.
+- 민감 파일은 에이전트가 읽거나 수정하지 않는다. `.claude/settings.json`의 `permissions.deny`로 차단되어 있다.
+  - 대상: `.env`, `.env.local`, `.env.*.local`, `.env.development|production|test`, 이름에 `credential`/`secret`이 들어간 파일, `*.pem`, `*.key`, `*.p12`, `*.pfx`, `.npmrc`, `.netrc`, SSH 키(`id_rsa*`, `id_ed25519*`), `~/.ssh`, `~/.aws`, `~/.config/gcloud`.
+  - `.env.example`은 값이 없는 템플릿이므로 예외로 읽고 수정할 수 있다.
+  - Read/Edit뿐 아니라 셸(`cat`, `Get-Content`, `grep`, `cp`, `rm`, `printenv` 등)로 우회해서 읽거나 내용을 출력하지 않는다. 차단 규칙에 걸리지 않는 우회 경로라도 금지다.
+  - 키 값이 필요한 작업은 사용자에게 직접 설정을 요청한다. 값을 대화, 로그, 커밋에 옮기지 않는다.
+  - deny 규칙을 완화하거나 제거하는 수정은 사용자의 명시적 승인 없이 하지 않는다.
 
 ### Do's and Don'ts
 

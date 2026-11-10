@@ -634,6 +634,42 @@
   line-height: 1.7;
 }
 
+/* ───── 스트리밍 카드 ───── */
+.streaming-card .code-block {
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.streaming-card .tab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.streaming-wait {
+  min-height: 320px;
+  padding: 20px;
+}
+
+.streaming-wait p {
+  margin-bottom: 12px;
+}
+
+.stream-caret {
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: #e6e4ff;
+  animation: caret-blink 1s steps(1) infinite;
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
 /* ───── 반응형 ───── */
 @media (max-width: 1080px) {
   .workspace {
