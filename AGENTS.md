@@ -17,7 +17,7 @@
 
 - 서버가 `.env`의 키 값을 클라이언트로 반환하지 않는다. `/api/config`는 boolean만 반환한다 (`server/index.ts:147-153`). 키 값을 응답, 로그, 에러 메시지에 넣지 않는다.
 - Google 호출은 API 키를 URL 쿼리(`?key=`)로 전달한다 (`server/index.ts:99`). 이 URL을 로그나 에러 메시지에 포함하지 않는다.
-- 사용자가 UI에 입력한 `apiKey`는 React state에만 둔다 (`src/App.tsx:14`). `localStorage`/`sessionStorage`에 저장하지 않는다.
+- 사용자가 UI에 입력한 `apiKey`는 새로고침 후에도 유지되도록 `localStorage`(`rcg:apiKey`)에 저장한다 (`src/App.tsx`, `src/utils/storage.ts`). 서버로는 요청 본문으로만 보내고, 로그/에러 메시지/URL에 넣지 않는다. 이 저장은 사용자 결정으로 허용된 예외다(XSS 시 유출 위험 인지).
 - `.env`는 커밋하지 않는다 (`.gitignore`). 키 이름 추가 시 `.env.example`도 함께 수정한다.
 
 ### Do's and Don'ts
