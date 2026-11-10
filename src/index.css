@@ -1,0 +1,57 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --desk: #2e8b8b;
+  --desk-dark: #277a7a;
+  --ink: #16162b;
+}
+
+body {
+  min-height: 100vh;
+  font-family: Galmuri11, Galmuri9, 'Malgun Gothic', 'Apple SD Gothic Neo', ui-monospace, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink);
+  /* 2px 체커 디더링으로 만든 데스크톱 바탕 */
+  background-color: var(--desk);
+  background-image:
+    linear-gradient(45deg, var(--desk-dark) 25%, transparent 25%, transparent 75%, var(--desk-dark) 75%),
+    linear-gradient(45deg, var(--desk-dark) 25%, transparent 25%, transparent 75%, var(--desk-dark) 75%);
+  background-size: 4px 4px;
+  background-position:
+    0 0,
+    2px 2px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px dashed var(--ink);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
